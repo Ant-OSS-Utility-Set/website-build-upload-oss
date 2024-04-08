@@ -1,0 +1,50 @@
+name: 'gitdoc-build-upload-oss'
+description: 'Build Git repo docs to  static html with hugo and  upload to oss '
+inputs:
+  access_key:
+    description: 'oss access key id'
+    required: true
+  access_secret:
+    description: 'oss access  secret id'
+    required: true
+  endpoint:
+    description: 'such as : http://xxx.xxx.com'
+    required: true
+  bucket:
+    description: 'such as : oss://bucketname'
+    required: true
+  build_script_path:
+    description: 'build script path,only one file'
+    require: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Fix git safe.directory in container
+      run: mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
+      shell: bash
+    # 使用 node:10
+    - name: use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.3.0
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.55.5'
+        extended: true
+    - name: Build
+      run: sh ${{inputs.build_script_path}} 
+      shell: bash
+    - name: setup aliyun oss
+      uses: manyuanrong/setup-ossutil@v2.0
+      with:
+        endpoint:  ${{ inputs.endpoint }}
+        access-key-id: ${{ inputs.access_key }}
+        access-key-secret: ${{ inputs.access_secret }}
+    - name: cp files to aliyun
+      run: ossutil cp -rf --acl public-read ./public ${{ inputs.bucket }}
+      shell: bash
