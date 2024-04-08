@@ -1,4 +1,4 @@
-# gitdoc-build-upload-oss
+# website-build-upload-oss
  把Git文档编译成静态HTML文件并上传到oss存储
 
 
@@ -10,14 +10,22 @@ See [action.yml](action.yml)
 
 ```yaml
 steps:
-  - uses: Ant-OSS-Utility-Set/website-build-upload-oss@main
-  - uses: manyuanrong/setup-ossutil@v2.0
-    with:
-      endpoint: "oss.aliyuncs.com"
-      access_key: "your_key_id"
-      access_secret: "your_key_secret"
-      bucket: "your oss bucket"
-      build_script_path:"Your script for building static HTML files，such as command :hugo "
+  name: deploy to cloud oss
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Ant-OSS-Utility-Set/website-build-upload-oss@main
+        with:
+          access_key: your oss access key
+          access_secret:  your oss access secret
+          endpoint: http://oss.aliyuncs.com
+          bucket: oss://your_bucket
 ```
 
 参数
