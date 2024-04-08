@@ -38,13 +38,13 @@ runs:
         extended: true
     - name: Build
       run: |
-      if [ -z "${{inputs.build_script_path}}" ]; then
-       echo 'build by hugo'
-       hugo
-      else
-        echo 'build by script'
-        sh "${{inputs.build_script_path}}"
-      fi
+          if [ -z "${{inputs.build_script_path}}" ]; then
+           echo 'build by hugo'
+           hugo
+          else
+            echo 'build by script'
+            sh "${{inputs.build_script_path}}"
+          fi
       shell: bash
     - name: setup aliyun oss
       uses: manyuanrong/setup-ossutil@v2.0
