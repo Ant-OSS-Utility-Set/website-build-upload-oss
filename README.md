@@ -26,6 +26,7 @@ jobs:
           access_secret:  your oss access secret
           endpoint: http://oss.aliyuncs.com
           bucket: oss://your_bucket
+          build_script_path: scripts/build-site.sh
 ```
 
 参数
