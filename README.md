@@ -35,8 +35,7 @@ jobs:
 - **access_key**： oss的访问key。
 - **access_secret**：oss的访问secret
 - **bucket**：oss的bucket名称
-- **build_script_path**：非必填，构建项目为静态文件的命令，默认命令：hugo
-- **build_script_path**：构建静态HTML的脚本路径
+- **build_script_path**：非必填，构建静态HTML的脚本命令路径，默认命令：hugo
 
 
 # License
