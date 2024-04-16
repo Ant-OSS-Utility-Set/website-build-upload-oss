@@ -15,7 +15,7 @@ inputs:
     required: true
   build_script_path:
     description: 'build script path,only one file'
-    require: true
+    require: false
 
 runs:
   using: 'composite'
@@ -37,7 +37,14 @@ runs:
         hugo-version: '0.55.5'
         extended: true
     - name: Build
-      run: sh ${{inputs.build_script_path}} 
+      run: |
+          if [ -z "${{inputs.build_script_path}}" ]; then
+           echo 'build by hugo'
+           hugo
+          else
+            echo 'build by script'
+            sh "${{inputs.build_script_path}}"
+          fi
       shell: bash
     - name: setup aliyun oss
       uses: manyuanrong/setup-ossutil@v2.0
